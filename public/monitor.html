@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini Proxy // SYSTEM MONITOR</title>
+  <link rel="icon" href="/public/app-icon.svg">
+  <link rel="manifest" href="/public/manifest.json">
+  <link rel="stylesheet" href="/public/monitor.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+  <div class="scanline"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span>Gemini Proxy</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-item active" data-section="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          仪表盘
+        </div>
+        <div class="nav-item" data-section="terminal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+          实时终端
+        </div>
+        <div class="nav-item" data-section="analytics">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          数据分析
+        </div>
+        <div class="nav-item" data-section="logs">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          请求日志
+        </div>
+        <div class="nav-item" data-section="connections">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          连接管理
+        </div>
+        <div class="nav-item" data-section="proxy-web">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          代理网页
+        </div>
+        <div class="nav-item" data-section="gallery">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          图片库
+        </div>
+        <div class="nav-item" data-section="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 0 2.83 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          系统设置
+        </div>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div id="service-status" class="status-pill">
+          <span class="status-dot"></span>
+          <span>服务运行中</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-bar">
+        <div class="page-title" id="page-title">仪表盘</div>
+        <div class="top-controls">
+          <button class="btn ghost" onclick="toggleTheme()" title="切换主题">
+            <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+              <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+          <label class="switch">
+            <input id="auto-refresh" type="checkbox" checked>
+            <span class="switch-slider"></span>
+            <span style="font-size: 15px; color: var(--text-muted);">自动刷新</span>
+          </label>
+        </div>
+      </header>
+
+      <div class="content-scroll">
+        <div class="container">
+          
+          <!-- Dashboard Section -->
+          <div id="view-dashboard" class="view-section active">
+            <!-- Core Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+              <div class="stat-card">
+                <div class="stat-label">活跃连接 (WebSocket)</div>
+                <div class="stat-value glitch-text" data-text="0" id="active-connections">0</div>
+                <div class="stat-hint">当前可用通道</div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">总请求处理</div>
+                <div class="stat-value" id="total-requests">0</div>
+                <div class="stat-hint">累计请求次数</div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7l-9-5-9 5v10l9 5 9-5v-5"/></svg></div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">成功率</div>
+                <div class="stat-value" id="success-rate">0%</div>
+                <div class="stat-hint">请求稳定性</div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">平均响应时间</div>
+                <div class="stat-value" id="avg-response">0ms</div>
+                <div class="stat-hint">端到端延迟</div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              </div>
+            </div>
+
+            <!-- Secondary Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3">
+              <div class="stat-card">
+                <div class="stat-label">模型调用总数</div>
+                <div class="stat-value" style="font-size: 36px;" id="total-model-calls">0</div>
+                <div class="stat-hint">不含 models-list</div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">模型调用成功</div>
+                <div class="stat-value" style="font-size: 36px; color: var(--success);" id="model-success-calls">0</div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">模型调用错误</div>
+                <div class="stat-value" style="font-size: 36px; color: var(--danger);" id="model-error-calls">0</div>
+                <div class="stat-hint">429 限速 <span id="rate-limit-errors" style="color: var(--warning); font-weight: 600;">0</span></div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
+              </div>
+            </div>
+
+            <!-- Token & Cost Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4">
+              <div class="stat-card">
+                <div class="stat-label">总 Tokens</div>
+                <div class="stat-value" style="font-size: 30px;" id="total-tokens">0</div>
+                <div class="stat-hint">In: <span id="prompt-tokens">0</span> / Out: <span id="completion-tokens">0</span></div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">总费用 (估算)</div>
+                <div class="stat-value" style="font-size: 30px; color: var(--success);" id="total-cost">$0.00</div>
+                <div class="stat-hint">累计消耗</div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">服务运行时间</div>
+                <div class="stat-value" style="font-size: 30px;" id="uptime">0s</div>
+                <div class="stat-hint">持续在线</div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">今日调用</div>
+                <div class="stat-value" style="font-size: 30px;" id="daily-calls-main">0</div>
+                <div class="stat-hint">今日费用 <span id="daily-cost-main" style="color: var(--success);">$0.00</span></div>
+                <div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+              </div>
+            </div>
+
+            <!-- Period Stats -->
+            <div class="card" style="margin-bottom: 24px;">
+              <div class="card-header">
+                <div class="card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  周期统计
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6" style="gap: 24px;">
+                  <div class="period-stat-item">
+                    <div class="stat-label">今日</div>
+                    <div class="stat-value" style="font-size: 24px;" id="daily-calls">0</div>
+                    <div class="stat-hint"><span id="daily-tokens">0</span> Tokens</div>
+                    <div class="stat-hint" style="color: var(--success);" id="daily-cost">$0.00</div>
+                  </div>
+                  <div class="period-stat-item">
+                    <div class="stat-label">昨日</div>
+                    <div class="stat-value" style="font-size: 24px;" id="yesterday-calls">0</div>
+                    <div class="stat-hint"><span id="yesterday-tokens">0</span> Tokens</div>
+                    <div class="stat-hint" style="color: var(--success);" id="yesterday-cost">$0.00</div>
+                  </div>
+                  <div class="period-stat-item">
+                    <div class="stat-label">本周</div>
+                    <div class="stat-value" style="font-size: 24px;" id="weekly-calls">0</div>
+                    <div class="stat-hint"><span id="weekly-tokens">0</span> Tokens</div>
+                    <div class="stat-hint" style="color: var(--success);" id="weekly-cost">$0.00</div>
+                  </div>
+                  <div class="period-stat-item">
+                    <div class="stat-label">上周</div>
+                    <div class="stat-value" style="font-size: 24px;" id="last-week-calls">0</div>
+                    <div class="stat-hint"><span id="last-week-tokens">0</span> Tokens</div>
+                    <div class="stat-hint" style="color: var(--success);" id="last-week-cost">$0.00</div>
+                  </div>
+                  <div class="period-stat-item">
+                    <div class="stat-label">本月</div>
+                    <div class="stat-value" style="font-size: 24px;" id="monthly-calls">0</div>
+                    <div class="stat-hint"><span id="monthly-tokens">0</span> Tokens</div>
+                    <div class="stat-hint" style="color: var(--success);" id="monthly-cost">$0.00</div>
+                  </div>
+                  <div class="period-stat-item">
+                    <div class="stat-label">上月</div>
+                    <div class="stat-value" style="font-size: 24px;" id="last-month-calls">0</div>
+                    <div class="stat-hint"><span id="last-month-tokens">0</span> Tokens</div>
+                    <div class="stat-hint" style="color: var(--success);" id="last-month-cost">$0.00</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Real-time Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3" style="gap: 24px;">
+              <div class="card lg:col-span-2">
+                <div class="card-header">
+                  <div class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    实时吞吐量 (Tokens/s)
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div id="chart-throughput" class="throughput-chart-container"></div>
+                </div>
+              </div>
+              
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                    实时活动
+                  </div>
+                </div>
+                <div class="card-body no-padding">
+                  <div id="activity-feed" class="activity-feed">
+                    <div class="empty-state" style="padding: 20px; text-align: center; color: var(--text-muted);">等待请求...</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Terminal Section -->
+          <div id="view-terminal" class="view-section">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+                  实时系统终端
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn ghost btn-xs" onclick="clearTerminal()">清屏</button>
+                  <button class="btn ghost btn-xs" onclick="toggleTerminalPause()" id="term-pause-btn">暂停</button>
+                </div>
+              </div>
+              <div class="card-body" style="padding: 0;">
+                <div id="terminal-window" class="terminal-window">
+                  <div class="terminal-line"><span class="ts">[SYSTEM]</span> <span class="msg">Terminal initialized...</span></div>
+                  <div class="terminal-line"><span class="ts">[SYSTEM]</span> <span class="msg">Connecting to log stream...</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Analytics Section -->
+          <div id="view-analytics" class="view-section">
+            <div class="card analytics-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                  模型数据分析
+                </div>
+                <div class="flex items-center gap-4" style="flex-wrap: wrap;">
+                  <div class="tabs">
+                    <button type="button" class="tab-btn active chart-tab" data-chart="usage-distribution">分布</button>
+                    <button type="button" class="tab-btn chart-tab" data-chart="usage-trend">趋势</button>
+                    <button type="button" class="tab-btn chart-tab" data-chart="call-share">占比</button>
+                    <button type="button" class="tab-btn chart-tab" data-chart="call-ranking">排行</button>
+                    <button type="button" class="tab-btn chart-tab" data-chart="error-dist">错误</button>
+                    <button type="button" class="tab-btn chart-tab" data-chart="latency-dist">耗时</button>
+                  </div>
+                  
+                  <div class="tabs">
+                    <button class="tab-btn active" onclick="setAnalyticsMetric('cost'); this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">费用</button>
+                    <button class="tab-btn" onclick="setAnalyticsMetric('tokens'); this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">Tokens</button>
+                    <button class="tab-btn" onclick="setAnalyticsMetric('calls'); this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">次数</button>
+                  </div>
+
+                  <div class="flex items-center gap-2">
+                    <div class="tabs">
+                      <button class="tab-btn" onclick="setAnalyticsDatePreset('today')">今日</button>
+                      <button class="tab-btn" onclick="setAnalyticsDatePreset('week')">本周</button>
+                      <button class="tab-btn" onclick="setAnalyticsDatePreset('month')">本月</button>
+                    </div>
+                    <input type="date" id="analytics-start-date" class="input" onchange="onAnalyticsDateFilterChange()">
+                    <span class="text-muted">-</span>
+                    <input type="date" id="analytics-end-date" class="input" onchange="onAnalyticsDateFilterChange()">
+                    <button class="btn ghost btn-xs" onclick="clearAnalyticsDateFilter()">清除</button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="chart-panel active" data-chart="usage-distribution">
+                  <div class="chart-panel-meta">
+                    <div class="chart-panel-title">模型消耗费用分布图</div>
+                    <div class="chart-panel-sub" id="summary-usage-distribution">总计：--</div>
+                  </div>
+                  <div id="chart-usage-distribution" class="chart-canvas"></div>
+                </div>
+
+                <div class="chart-panel" data-chart="usage-trend">
+                  <div class="chart-panel-meta">
+                    <div class="chart-panel-title">模型费用消耗趋势图</div>
+                    <div class="chart-panel-sub" id="summary-usage-trend">最近一天：--</div>
+                  </div>
+                  <div id="chart-usage-trend" class="chart-canvas"></div>
+                </div>
+
+                <div class="chart-panel" data-chart="call-share">
+                  <div class="chart-panel-meta">
+                    <div class="chart-panel-title">模型费用消耗占比图</div>
+                    <div class="chart-panel-sub" id="summary-call-share">总计：--</div>
+                  </div>
+                  <div class="chart-split">
+                    <div id="chart-call-share-list" class="chart-list"></div>
+                    <div id="chart-call-share" class="chart-canvas"></div>
+                  </div>
+                </div>
+
+                <div class="chart-panel" data-chart="call-ranking">
+                  <div class="chart-panel-meta">
+                    <div class="chart-panel-title">模型费用消耗排行图</div>
+                    <div class="chart-panel-sub" id="summary-call-ranking">Top 排行：--</div>
+                  </div>
+                  <div id="chart-call-ranking" class="chart-canvas"></div>
+                </div>
+
+                <div class="chart-panel" data-chart="error-dist">
+                  <div class="chart-panel-meta">
+                    <div class="chart-panel-title">错误类型分布</div>
+                    <div class="chart-panel-sub" id="summary-error-dist">总计：--</div>
+                  </div>
+                  <div id="chart-error-dist" class="chart-canvas"></div>
+                </div>
+
+                <div class="chart-panel" data-chart="latency-dist">
+                  <div class="chart-panel-meta">
+                    <div class="chart-panel-title">响应时间分布</div>
+                    <div class="chart-panel-sub" id="summary-latency-dist">平均：--</div>
+                  </div>
+                  <div id="chart-latency-dist" class="chart-canvas"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Logs Section -->
+          <div id="view-logs" class="view-section">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">模型使用统计</div>
+              </div>
+              <div class="card-body no-padding">
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>模型名称</th>
+                        <th>请求数</th>
+                        <th>成功/失败</th>
+                        <th>平均耗时</th>
+                        <th>成功率</th>
+                        <th>Tokens (输入/输出/总)</th>
+                        <th>费用 (USD)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="model-stats">
+                      <tr><td colspan="7" class="empty-state" style="text-align:center; padding: 20px;">暂无数据</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">请求日志</div>
+                <div class="flex items-center gap-4" style="flex-wrap: wrap;">
+                  <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('all'); this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">全部</button>
+                    <button class="tab-btn" onclick="switchTab('success'); this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">成功</button>
+                    <button class="tab-btn" onclick="switchTab('processing'); this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">进行中</button>
+                    <button class="tab-btn" onclick="switchTab('error'); this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">异常</button>
+                  </div>
+                  
+                  <div class="flex items-center gap-2">
+                    <div class="tabs">
+                      <button class="tab-btn" onclick="setRequestDatePreset('today')">今日</button>
+                      <button class="tab-btn" onclick="setRequestDatePreset('week')">本周</button>
+                      <button class="tab-btn" onclick="setRequestDatePreset('month')">本月</button>
+                    </div>
+                    <input type="date" id="filter-start-date" class="input" onchange="onDateFilterChange()">
+                    <span class="text-muted">-</span>
+                    <input type="date" id="filter-end-date" class="input" onchange="onDateFilterChange()">
+                  </div>
+
+                  <input type="text" id="log-search" class="input search-input" placeholder="搜索 ID / 模型 / 路径..." oninput="onSearchInput()">
+                  
+                  <button class="btn ghost" onclick="refreshRequestLogs()">刷新</button>
+                  <button class="btn ghost" onclick="resetLogFilters()">清空</button>
+                  <button class="btn ghost" onclick="exportLogs()">导出</button>
+                </div>
+              </div>
+              <div class="card-body no-padding">
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>时间</th>
+                        <th>ID / 路径</th>
+                        <th>模型</th>
+                        <th>状态</th>
+                        <th>耗时</th>
+                        <th>Tokens (in/out/total)</th>
+                        <th>费用</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="request-logs">
+                      <tr><td colspan="8" class="empty-state" style="text-align:center; padding: 40px; color: var(--text-muted);">加载中...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="pagination" class="pagination" style="display: none; padding: 16px 28px;">
+                  <div class="pagination-info" id="pagination-info">显示 0-0 共 0 条</div>
+                  <div class="pagination-controls">
+                    <button class="btn ghost btn-xs" onclick="changePage(-1)" id="btn-prev">上一页</button>
+                    <button class="btn ghost btn-xs" onclick="changePage(1)" id="btn-next">下一页</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connections Section -->
+          <div id="view-connections" class="view-section">
+            <!-- Quota Overview -->
+            <div class="card" style="margin-bottom: 24px;">
+              <div class="card-header">
+                <div class="card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+                  额度池总览 (Quota Pool)
+                </div>
+                <div style="font-size: 13px; color: var(--text-muted);">
+                  距离重置: <span id="quota-reset-countdown" style="color: var(--primary); font-family: var(--font-mono); font-weight: 600;">--:--:--</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="quota-overview-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4" style="gap: 16px;">
+                  <!-- Quota items injected here -->
+                  <div class="empty-state">加载中...</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">连接池概览</div>
+                <button class="btn ghost btn-xs" onclick="refreshPoolStatus()">刷新</button>
+              </div>
+              <div class="card-body">
+                <div class="pool-grid">
+                  <div class="pool-item">
+                    <span class="label">总连接槽位</span>
+                    <span class="value" id="pool-total">0</span>
+                  </div>
+                  <div class="pool-item">
+                    <span class="label">活跃连接</span>
+                    <span class="value" style="color: var(--success);" id="pool-active">0</span>
+                  </div>
+                  <div class="pool-item">
+                    <span class="label">正在连接</span>
+                    <span class="value" style="color: var(--info);" id="pool-connecting">0</span>
+                  </div>
+                  <div class="pool-item">
+                    <span class="label">错误状态</span>
+                    <span class="value" style="color: var(--danger);" id="pool-error">0</span>
+                  </div>
+                </div>
+                <div style="margin-top: 20px; font-size: 14px; color: var(--text-muted); display: flex; justify-content: space-between; padding: 0 12px;">
+                  <span>已关闭: <span id="pool-closed">0</span></span>
+                  <span>池累计处理: <span id="pool-total-requests">0</span></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">WebSocket 连接实例</div>
+                <button class="btn ghost btn-xs" onclick="refreshConnections()">刷新</button>
+              </div>
+              <div class="card-body" style="background: rgba(0,0,0,0.1);">
+                <div id="connections-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                  <!-- Connections injected here -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gallery Section -->
+          <div id="view-gallery" class="view-section">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">图片库</div>
+                <div class="flex items-center gap-4" style="flex-wrap: wrap;">
+                  <div class="tabs">
+                    <button class="tab-btn active" onclick="switchGalleryTab('all'); this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">全部</button>
+                    <button class="tab-btn" onclick="switchGalleryTab('request'); this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">上传 (Request)</button>
+                    <button class="tab-btn" onclick="switchGalleryTab('response'); this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');">响应 (Response)</button>
+                  </div>
+
+                  <div class="flex items-center gap-2">
+                    <div class="tabs">
+                      <button class="tab-btn" onclick="setGalleryDatePreset('today')">今日</button>
+                      <button class="tab-btn" onclick="setGalleryDatePreset('week')">本周</button>
+                      <button class="tab-btn" onclick="setGalleryDatePreset('month')">本月</button>
+                    </div>
+                    <input type="date" id="gallery-start-date" class="input" onchange="onGalleryDateFilterChange()">
+                    <span class="text-muted">-</span>
+                    <input type="date" id="gallery-end-date" class="input" onchange="onGalleryDateFilterChange()">
+                  </div>
+
+                  <input type="text" id="gallery-search" class="input search-input" placeholder="搜索 ID / 模型..." oninput="onGallerySearchInput()">
+                  
+                  <select id="gallery-page-size" class="select" onchange="onGalleryPageSizeChange()" style="width: auto;">
+                    <option value="24">24条/页</option>
+                    <option value="48">48条/页</option>
+                    <option value="96">96条/页</option>
+                  </select>
+
+                  <button class="btn ghost" onclick="rebuildImageIndex()">重建索引</button>
+                  <button class="btn ghost" onclick="refreshGallery()">刷新</button>
+                  <button class="btn ghost" onclick="resetGalleryFilters()">清空</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="gallery-grid" class="gallery-grid">
+                  <div class="empty-state" style="text-align: center; padding: 40px; color: var(--text-muted);">加载中...</div>
+                </div>
+                <div id="gallery-pagination" class="pagination" style="display: none; padding: 16px 0 0 0; border-top: 1px solid var(--border-color); margin-top: 20px;">
+                    <div class="pagination-info" id="gallery-pagination-info">显示 0-0 共 0 条</div>
+                    <div class="pagination-controls">
+                      <button class="btn ghost btn-xs" onclick="changeGalleryPage(-1)" id="btn-gallery-prev">上一页</button>
+                      <button class="btn ghost btn-xs" onclick="changeGalleryPage(1)" id="btn-gallery-next">下一页</button>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings Section -->
+          <div id="view-settings" class="view-section">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">配置与管理</div>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="system-message-strategy">System 消息策略配置</label>
+                  <div class="flex gap-4 items-center" style="flex-wrap: wrap;">
+                    <select id="system-message-strategy" class="select" style="flex: 1; min-width: 200px;" onchange="updateStrategyDescription()">
+                      <option value="none">默认：仅作为系统指令 (System Instruction)</option>
+                      <option value="convert-all-to-user">全部转为用户消息 (User Message)</option>
+                      <option value="merge-first">首部合并为系统指令 (其余转 User)</option>
+                      <option value="merge-first-parts">首部保留为系统指令 (其余转 User)</option>
+                      <option value="merge-all">全部合并为系统指令 (Merge All)</option>
+                    </select>
+                    
+                    <div style="width: 1px; height: 24px; background: var(--border-color);"></div>
+
+                    <label class="switch">
+                      <input id="system-message-prefix" type="checkbox">
+                      <span class="switch-slider"></span>
+                      <span style="white-space: nowrap;">添加 "system: " 前缀</span>
+                    </label>
+
+                    <div style="width: 1px; height: 24px; background: var(--border-color);"></div>
+
+                    <label class="switch">
+                      <input id="exclude-base64-logs" type="checkbox">
+                      <span class="switch-slider"></span>
+                      <span style="white-space: nowrap;">日志剔除 Base64 图片</span>
+                    </label>
+
+                    <div style="width: 1px; height: 24px; background: var(--border-color);"></div>
+
+                    <label class="switch">
+                      <input id="enable-pseudo-stream-models" type="checkbox" checked>
+                      <span class="switch-slider"></span>
+                      <span style="white-space: nowrap;">显示伪流版模型</span>
+                    </label>
+
+                    <button class="btn primary" onclick="updateConfig()">保存配置</button>
+                  </div>
+                </div>
+
+                <div id="strategy-description" class="stat-hint" style="margin-top: 20px; line-height: 1.6; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+                  <!-- Dynamic content -->
+                </div>
+
+                <div class="form-group" style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-color);">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                    <div>
+                      <div style="font-weight: 600; font-size: 15px; color: var(--text-main); margin-bottom: 4px;">伪流式传输参数配置 (Fake Streaming Params)</div>
+                      <div style="font-size: 13px; color: var(--text-muted); max-width: 600px;">
+                        配置带有 <code>-伪流</code> 后缀模型的传输行为。强制向 Gemini 发送非流式请求，但在代理端向客户端模拟流式响应。
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div style="margin-bottom: 16px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                    <span style="font-size: 12px; color: var(--text-muted);">快速预设:</span>
+                    <button class="btn btn-xs ghost" onclick="applyFakeStreamPreset(10, 15)">舒适阅读 (默认)</button>
+                    <button class="btn btn-xs ghost" onclick="applyFakeStreamPreset(10, 1)">极速平滑</button>
+                    <button class="btn btn-xs ghost" onclick="applyFakeStreamPreset(100, 5)">大块传输</button>
+                    <button class="btn btn-xs ghost" onclick="applyFakeStreamPreset(5, 30)">打字机</button>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2" style="gap: 16px;">
+                    <div>
+                      <label for="fake-streaming-chunk-size" style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;">分块大小 (字符)</label>
+                      <input type="number" id="fake-streaming-chunk-size" class="input" value="10" min="1" style="width: 100%;">
+                    </div>
+                    <div>
+                      <label for="fake-streaming-delay" style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;">传输延迟 (毫秒)</label>
+                      <input type="number" id="fake-streaming-delay" class="input" value="15" min="0" style="width: 100%;">
+                    </div>
+                  </div>
+                </div>
+                <div id="config-status" style="margin-top: 8px; font-size: 13px; height: 16px;"></div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top: 24px;">
+              <div class="card-header">
+                <div class="card-title">API 调用路径示例</div>
+              </div>
+              <div class="card-body">
+                <div style="margin-bottom: 8px; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">本机调用 (127.0.0.1) - 推荐</div>
+                <div class="api-example-list">
+                  <div class="api-example-item" onclick="copyText(this.textContent.trim())">http://127.0.0.1:8889</div>
+                  <div class="api-example-item" onclick="copyText(this.textContent.trim())">http://127.0.0.1:8889/v1</div>
+                  <div class="api-example-item" onclick="copyText(this.textContent.trim())">http://127.0.0.1:8889/v1/chat/completions</div>
+                </div>
+
+                <div style="margin-top: 20px; margin-bottom: 8px; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">监听/配置地址 (0.0.0.0)</div>
+                <div class="api-example-list">
+                  <div class="api-example-item" onclick="copyText(this.textContent.trim())">http://0.0.0.0:8889</div>
+                  <div class="api-example-item" onclick="copyText(this.textContent.trim())">http://0.0.0.0:8889/v1</div>
+                  <div class="api-example-item" onclick="copyText(this.textContent.trim())">http://0.0.0.0:8889/v1/chat/completions</div>
+                </div>
+
+                <div style="margin-top: 20px; font-size: 13px; color: var(--text-muted); background: rgba(0,0,0,0.2); padding: 16px; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <div style="margin-bottom: 8px; color: var(--primary); font-weight: 600;">📝 地址说明</div>
+                  <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
+                    <li><strong style="color: var(--text-main);">127.0.0.1</strong>: 本机回环地址，最稳定，推荐用于本机客户端调用。</li>
+                    <li><strong style="color: var(--text-main);">0.0.0.0</strong>: 代表本机所有 IP 接口。通常用于服务端配置监听地址。部分系统/客户端可能无法直接向此地址发送请求。</li>
+                    <li><strong style="color: var(--text-main);">局域网访问</strong>: 请使用本机的局域网 IP (如 192.168.1.x) 替换上述地址中的 IP 部分。</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox-modal" class="lightbox-overlay" onclick="closeLightbox(event)">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox(event)">✕</button>
+      <div class="lightbox-image-container">
+        <img id="lightbox-image" src="" alt="Full size image">
+      </div>
+      <div class="lightbox-info">
+        <div class="lightbox-meta">
+          <div class="lightbox-meta-item">
+            <span class="label">时间</span>
+            <span class="value" id="lightbox-time">-</span>
+          </div>
+          <div class="lightbox-meta-item">
+            <span class="label">模型</span>
+            <span class="value" id="lightbox-model">-</span>
+          </div>
+          <div class="lightbox-meta-item">
+            <span class="label">类型</span>
+            <span class="value" id="lightbox-type">-</span>
+          </div>
+          <div class="lightbox-meta-item">
+            <span class="label">ID</span>
+            <span class="value link" id="lightbox-id" onclick="viewRequestDetailFromLightbox()">-</span>
+          </div>
+        </div>
+        <div class="lightbox-actions">
+          <a id="lightbox-download" href="#" download class="btn primary btn-sm">下载原图</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div id="detail-modal" class="modal-overlay" onclick="closeDetailModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="card-title">请求详情</div>
+        <button class="btn ghost" onclick="closeDetailModal(event)">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-grid">
+          <div class="detail-item"><strong>请求 ID</strong><div id="detail-request-id">-</div></div>
+          <div class="detail-item"><strong>路径</strong><div id="detail-path">-</div></div>
+          <div class="detail-item"><strong>模型</strong><div id="detail-model">-</div></div>
+          <div class="detail-item"><strong>处理连接</strong><div id="detail-connection">-</div></div>
+          <div class="detail-item"><strong>状态</strong><div id="detail-status">-</div></div>
+          <div class="detail-item"><strong>响应时间</strong><div id="detail-response-time">-</div></div>
+          <div class="detail-item"><strong>Tokens (In/Out/Total)</strong><div id="detail-tokens">-</div></div>
+          <div class="detail-item"><strong>估算费用</strong><div id="detail-cost">-</div></div>
+        </div>
+
+        <div class="card-header" style="padding: 0 0 12px 0; border-bottom: none; background: transparent;">
+          <div class="card-title">请求内容</div>
+          <div class="toggle-group" id="request-view-toggle">
+            <div class="tabs">
+              <button class="tab-btn active" data-mode="preview" onclick="setRequestViewMode('preview')">预览</button>
+              <button class="tab-btn" data-mode="raw" onclick="setRequestViewMode('raw')">原始</button>
+              <button class="tab-btn" onclick="copyCurrent('request')">复制</button>
+              <button class="tab-btn" onclick="copyAsCurl()">Copy cURL</button>
+            </div>
+          </div>
+        </div>
+        <div id="request-preview" class="request-preview">
+          <div id="preview-request" class="preview-content">Loading...</div>
+        </div>
+        <pre id="request-raw" class="hidden">Loading...</pre>
+
+        <div class="card-header" style="padding: 24px 0 12px 0; border-bottom: none; background: transparent;">
+          <div class="card-title">响应内容</div>
+          <div class="toggle-group" id="response-view-toggle">
+            <div class="tabs">
+              <button class="tab-btn active" data-mode="preview" onclick="setResponseViewMode('preview')">预览</button>
+              <button class="tab-btn" data-mode="raw" onclick="setResponseViewMode('raw')">原始</button>
+              <button class="tab-btn" onclick="copyCurrent('response')">复制</button>
+            </div>
+          </div>
+        </div>
+        <div id="response-preview" class="response-preview">
+          <div class="preview-block">
+            <div class="stat-label" style="margin-bottom: 8px;">正文</div>
+            <div id="preview-main" class="preview-content">Loading...</div>
+          </div>
+          <div class="preview-block" style="margin-top: 12px;">
+            <div class="stat-label" style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+              思维链
+              <button class="btn ghost btn-xs" onclick="toggleReasoning()">折叠/展开</button>
+            </div>
+            <div id="preview-reasoning" class="preview-content reasoning collapsed">暂无</div>
+          </div>
+        </div>
+        <pre id="response-raw" class="hidden">Loading...</pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="/public/monitor.js"></script>
+</body>
+</html>

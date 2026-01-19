@@ -1,0 +1,184 @@
+{
+  "groups": {
+    "group_2_5_pro": {
+      "models": [
+        "gemini-2.5-pro",
+        "gemini-2.5-pro-HIGH",
+        "gemini-2.5-pro-HIGH-search",
+        "gemini-2.5-pro-LOW",
+        "gemini-2.5-pro-LOW-search",
+        "gemini-2.5-pro-search",
+        "gemini-2.5-pro-preview-tts",
+        "gemini-pro-latest"
+      ],
+      "limit": 100,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_2_5_flash_lite": {
+      "models": [
+        "gemini-2.5-flash-lite",
+        "gemini-2.5-flash-lite-HIGH",
+        "gemini-2.5-flash-lite-HIGH-search",
+        "gemini-2.5-flash-lite-LOW",
+        "gemini-2.5-flash-lite-LOW-search",
+        "gemini-2.5-flash-lite-nothinking",
+        "gemini-2.5-flash-lite-nothinking-search",
+        "gemini-2.5-flash-lite-search",
+        "gemini-2.5-flash-lite-preview-09-2025",
+        "gemini-2.5-flash-lite-preview-09-2025-HIGH",
+        "gemini-2.5-flash-lite-preview-09-2025-HIGH-search",
+        "gemini-2.5-flash-lite-preview-09-2025-LOW",
+        "gemini-2.5-flash-lite-preview-09-2025-LOW-search",
+        "gemini-2.5-flash-lite-preview-09-2025-nothinking",
+        "gemini-2.5-flash-lite-preview-09-2025-nothinking-search",
+        "gemini-2.5-flash-lite-preview-09-2025-search",
+        "gemini-flash-lite-latest"
+      ],
+      "limit": 200,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_2_5_flash": {
+      "models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-HIGH",
+        "gemini-2.5-flash-HIGH-search",
+        "gemini-2.5-flash-LOW",
+        "gemini-2.5-flash-LOW-search",
+        "gemini-2.5-flash-nothinking",
+        "gemini-2.5-flash-nothinking-search",
+        "gemini-2.5-flash-search",
+        "gemini-2.5-flash-preview-09-2025",
+        "gemini-2.5-flash-preview-09-2025-HIGH",
+        "gemini-2.5-flash-preview-09-2025-HIGH-search",
+        "gemini-2.5-flash-preview-09-2025-LOW",
+        "gemini-2.5-flash-preview-09-2025-LOW-search",
+        "gemini-2.5-flash-preview-09-2025-nothinking",
+        "gemini-2.5-flash-preview-09-2025-nothinking-search",
+        "gemini-2.5-flash-preview-09-2025-search",
+        "gemini-flash-latest"
+      ],
+      "limit": 100,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_3_0_flash": {
+      "models": [
+        "gemini-3-flash-preview",
+        "gemini-3-flash-preview-MINIMAL",
+        "gemini-3-flash-preview-MINIMAL-search",
+        "gemini-3-flash-preview-LOW",
+        "gemini-3-flash-preview-LOW-search",
+        "gemini-3-flash-preview-MEDIUM",
+        "gemini-3-flash-preview-MEDIUM-search",
+        "gemini-3-flash-preview-HIGH",
+        "gemini-3-flash-preview-HIGH-search",
+        "gemini-3-flash-preview-search"
+      ],
+      "limit": 97,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_3_0_pro": {
+      "models": [
+        "gemini-3-pro-preview",
+        "gemini-3-pro-preview-LOW",
+        "gemini-3-pro-preview-LOW-search",
+        "gemini-3-pro-preview-HIGH",
+        "gemini-3-pro-preview-HIGH-search",
+        "gemini-3-pro-preview-search"
+      ],
+      "limit": 46,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_GEMINI-ROBOTICS-ER-1.5": {
+      "models": [
+        "gemini-robotics-er-1.5-preview",
+        "gemini-robotics-er-1.5-preview-HIGH",
+        "gemini-robotics-er-1.5-preview-HIGH-search",
+        "gemini-robotics-er-1.5-preview-LOW",
+        "gemini-robotics-er-1.5-preview-LOW-search",
+        "gemini-robotics-er-1.5-preview-nothinking",
+        "gemini-robotics-er-1.5-preview-nothinking-search",
+        "gemini-robotics-er-1.5-preview-search"
+      ],
+      "limit": 98,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_2_5_flash_image": {
+      "models": [
+        "gemini-2.5-flash-image"
+      ],
+      "limit": 89,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_3_pro_image": {
+      "models": [
+        "gemini-3-pro-image-preview"
+      ],
+      "limit": 50,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_2_0_flash": {
+      "models": [
+        "gemini-2.0-flash",
+        "gemini-2.0-flash-search",
+        "gemini-2.0-flash-001",
+        "gemini-2.0-flash-001-search",
+        "gemini-2.0-flash-exp",
+        "gemini-2.0-flash-exp-search",
+        "gemini-exp-1206"
+      ],
+      "limit": 51,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_2_0_flash_lite": {
+      "models": [
+        "gemini-2.0-flash-lite",
+        "gemini-2.0-flash-lite-001",
+        "gemini-2.0-flash-lite-preview",
+        "gemini-2.0-flash-lite-preview-02-05"
+      ],
+      "limit": 51,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_2_0_flash_image": {
+      "models": [
+        "gemini-2.0-flash-exp-image-generation"
+      ],
+      "limit": 400,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_computer_use": {
+      "models": [
+        "gemini-2.5-computer-use-preview-10-2025"
+      ],
+      "limit": 50,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "group_embeddings": {
+      "models": [
+        "embedding-gecko-001",
+        "embedding-001",
+        "text-embedding-004"
+      ],
+      "limit": 1000,
+      "resetTime": "00:00",
+      "timezone": "America/Los_Angeles"
+    }
+  },
+  "default": {
+    "limit": 50,
+    "resetTime": "00:00",
+    "timezone": "America/Los_Angeles"
+  }
+}
